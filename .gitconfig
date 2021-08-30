@@ -1,0 +1,6 @@
+[user]
+	name = Sebastián Martínez
+	email = sebastian.martinez.serna@gmail.com
+[alias]
+	lg = log --abbrev-commit -25 --graph --decorate --format=format:'%C(magenta)%h%C(reset) %C(green)(%ar)%C(reset)%C(bold cyan)%d%C(reset) %C(dim green)- %an%C(reset)%n''        %C(bold white)%s%C(reset)'
+	s = status
