@@ -32,20 +32,27 @@ case ":$PATH:" in
 esac
 # pnpm end
 
+export PATH="$HOME/Apps/flutter/bin:$PATH"
+
 # ------------------------------------------------------------------------------
 # Aliases
 # ------------------------------------------------------------------------------
 
 alias v="nvim"
-alias bc="batcat"
+alias cat="bat"
 alias lg="lazygit"
 alias py="python3"
 alias ls="eza --icons"
 alias la="eza -lah --icons"
 
+
+alias fooocus="cd ~/Apps/Fooocus && git pull && uv run entry_with_update.py --always-download-new-model --disable-in-browser --preset realistic"
+
 # Develop
 alias w.="windsurf ."
 alias c.="code ."
+
+# alias dbt="~/Apps/dbt"
 
 # ~~~~~~~~~~ UV ~~~~~~~~~~
 ## Envoriments
@@ -67,11 +74,15 @@ alias uvfreeze="uv pip freeze > requirements.txt"
 # Fast edit zshrc
 alias zshconf="nvim ~/.zshrc"
 
+# pnpm
+alias prd="pnpm run dev"
+alias prb="pnpm run build"
+alias prp="pnpm run preview"
+alias paa="pnpm astro add"
+
 # Install
-alias sai="sudo apt install"
-alias saiy="sudo apt install -y"
-alias sni="sudo nala install"
-alias sniy="sudo nala install -y"
+alias sdi="sudo dnf install"
+alias sdiy="sudo dnf install -y"
 
 # Navigation aliases
 alias cdn="cd ~/.config/nvim"
@@ -86,20 +97,38 @@ alias cda="cd ~/Apps"
 # System update function
 function upsys {
 
+  # System update
   echo
-  echo "\033[32m╔══════╦═══════════════════╗\033[0m"
-  echo "\033[32m║ \033[34;1mNala \033[32m║ \033[34;1mUpdate && Upgrade \033[32m║\033[0m"
-  echo "\033[32m╚══════╩═══════════════════╝\033[0m"
+  echo "\033[32m╔═════╦═══════════════════╗\033[0m"
+  echo "\033[32m║ \033[34;1mDNF \033[32m║ \033[34;1mUpdate && Upgrade \033[32m║\033[0m"
+  echo "\033[32m╚═════╩═══════════════════╝\033[0m"
   echo
-  sudo nala update
-  sudo nala upgrade
+  sudo dnf update
+  sudo dnf upgrade
 
+  # Flatpak update
   echo
   echo "\033[32m╔═════════╦════════════════╗\033[0m"
-  echo "\033[32m║ \033[34;1mFaltpak \033[32m║ \033[34;1mUpdate         \033[32m║\033[0m"
+  echo "\033[32m║ \033[34;1mFlatpak \033[32m║ \033[34;1mUpdate         \033[32m║\033[0m"
   echo "\033[32m╚═════════╩════════════════╝\033[0m"
   echo
   flatpak update
+
+  # Rust update
+  echo
+  echo "\033[32m╔══════╦════════════════╗\033[0m"
+  echo "\033[32m║ \033[34;1mRust \033[32m║ \033[34;1mUpdate         \033[32m║\033[0m"
+  echo "\033[32m╚══════╩════════════════╝\033[0m"
+  echo
+  rustup update
+
+  # Pnpm update
+  echo
+  echo "\033[32m╔══════╦════════════════╗\033[0m"
+  echo "\033[32m║ \033[34;1mpnpm \033[32m║ \033[34;1mUpdate         \033[32m║\033[0m"
+  echo "\033[32m╚══════╩════════════════╝\033[0m"
+  echo
+  pnpm self-update
 }
 
 # Create a directory and cd into it
@@ -113,6 +142,7 @@ function extract {
     case "$1" in
       *.tar.bz2)   tar xjf "$1"   ;;
       *.tar.gz)    tar xzf "$1"   ;;
+      *.tar.xz)    tar xf "$1"    ;;
       *.bz2)       bunzip2 "$1"   ;;
       *.rar)       unrar x "$1"   ;;
       *.gz)        gunzip "$1"    ;;
@@ -129,6 +159,28 @@ function extract {
   fi
 }
 
+function ffmpeg_extract_audio {
+  ffmpeg -i $1 -map 0:a -acodec libmp3lame $2
+}
+
+function ffmpeg_compress_video {
+  ffmpeg -i $1 -c:v libx264 -crf 25 -preset medium -tag:v hvc1 -c:a eac3 -b:a 256k $2
+}
+
+function ffmpeg_replace_audio {
+  ffmpeg -i $1 -i $2 -c:v copy -map 0:v:0 -map 1:a:0 $3
+}
+
+function gs_compress_pdf {
+  gs -sDEVICE=pdfwrite -dCompatibilityLevel=1.4 -dPDFSETTINGS=/printer -dNOPAUSE -dQUIET -dBATCH -sOutputFile=$2 $1
+}
+
+function ffmpeg_custom_functions {
+  echo "\033[34;1mffmpeg_extract_audio  \033[32m║ \033[34;1mparam 1: video_input \033[32m║ \033[34;1mparam 2: audio_output \033[32m║"
+  echo "\033[34;1mffmpeg_compress_video \033[32m║ \033[34;1mparam 1: video_input \033[32m║ \033[34;1mparam 2: video_output \033[32m║"
+  echo "\033[34;1mffmpeg_replace_audio  \033[32m║ \033[34;1mparam 1: video_input \033[32m║ \033[34;1mparam 2: audio_input  \033[32m║ \033[34;1mparam 3: video_output \033[32m║"
+}
+
 function du1 {
   du -sh * | sort -rh | head -10
 }
@@ -136,3 +188,4 @@ source ~/powerlevel10k/powerlevel10k.zsh-theme
 
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
 [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
+
