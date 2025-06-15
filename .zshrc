@@ -1,3 +1,4 @@
+
 # Enable Powerlevel10k instant prompt. Should stay close to the top of ~/.zshrc.
 # Initialization code that may require console input (password prompts, [y/n]
 # confirmations, etc.) must go above this block; everything else may go below.
@@ -18,14 +19,15 @@ source $ZSH/oh-my-zsh.sh
 
 . "$HOME/.local/bin/env"
 
-export PATH="$PATH:/opt/nvim-linux64/bin"
+# export PATH="$PATH:/opt/nvim-linux64/bin"
+export PATH="$PATH:/opt/nvim-linux-x86_64/bin"
 
 export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
 [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
 
 # pnpm
-export PNPM_HOME="/home/sebas/.local/share/pnpm"
+export PNPM_HOME="$HOME/.local/share/pnpm"
 case ":$PATH:" in
   *":$PNPM_HOME:"*) ;;
   *) export PATH="$PNPM_HOME:$PATH" ;;
@@ -34,17 +36,17 @@ esac
 
 export PATH="$HOME/Apps/flutter/bin:$PATH"
 
+
 # ------------------------------------------------------------------------------
 # Aliases
 # ------------------------------------------------------------------------------
 
 alias v="nvim"
-alias cat="bat"
+alias cat="batcat"
 alias lg="lazygit"
 alias py="python3"
 alias ls="eza --icons"
 alias la="eza -lah --icons"
-
 
 alias fooocus="cd ~/Apps/Fooocus && git pull && uv run entry_with_update.py --always-download-new-model --disable-in-browser --preset realistic"
 
@@ -81,14 +83,16 @@ alias prp="pnpm run preview"
 alias paa="pnpm astro add"
 
 # Install
-alias sdi="sudo dnf install"
-alias sdiy="sudo dnf install -y"
+alias sni="sudo nala install"
+alias sniy="sudo nala install -y"
 
 # Navigation aliases
 alias cdn="cd ~/.config/nvim"
 alias cdk="cd ~/.config/kitty"
 alias cdd="cd ~/Develop"
 alias cda="cd ~/Apps"
+alias cddwm="cd ~/Develop/work/monokera"
+alias cddwi="cd ~/Develop/work/INTER"
 
 # ------------------------------------------------------------------------------
 # Functions
@@ -99,12 +103,12 @@ function upsys {
 
   # System update
   echo
-  echo "\033[32m╔═════╦═══════════════════╗\033[0m"
-  echo "\033[32m║ \033[34;1mDNF \033[32m║ \033[34;1mUpdate && Upgrade \033[32m║\033[0m"
-  echo "\033[32m╚═════╩═══════════════════╝\033[0m"
+  echo "\033[32m╔══════╦═══════════════════╗\033[0m"
+  echo "\033[32m║ \033[34;1mNALA \033[32m║ \033[34;1mUpdate && Upgrade \033[32m║\033[0m"
+  echo "\033[32m╚══════╩═══════════════════╝\033[0m"
   echo
-  sudo dnf update
-  sudo dnf upgrade
+  sudo nala update
+  sudo nala upgrade
 
   # Flatpak update
   echo
@@ -112,7 +116,7 @@ function upsys {
   echo "\033[32m║ \033[34;1mFlatpak \033[32m║ \033[34;1mUpdate         \033[32m║\033[0m"
   echo "\033[32m╚═════════╩════════════════╝\033[0m"
   echo
-  flatpak update
+  sudo flatpak update
 
   # Rust update
   echo
@@ -129,6 +133,8 @@ function upsys {
   echo "\033[32m╚══════╩════════════════╝\033[0m"
   echo
   pnpm self-update
+
+
 }
 
 # Create a directory and cd into it
@@ -188,4 +194,4 @@ source ~/powerlevel10k/powerlevel10k.zsh-theme
 
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
 [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
-
+eval "$(starship init zsh)"
